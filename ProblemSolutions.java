@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Jose Ottati / SECTION 002
  *
  *   This java file contains the problem solutions for the methods lastBoulder,
  *   showDuplicates, and pair methods. You should utilize the Java Collection
@@ -65,11 +65,30 @@ public class ProblemSolutions {
 
   public static int lastBoulder(int[] boulders) {
 
-      //
-      // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME / SECTION # ABOVE
-      //
-      return -1;
-  }
+      // Create a max-heap using PriorityQueue with reverse order comparator
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+    
+    // Add all boulders to the max-heap
+    for (int stone : boulders) {
+        maxHeap.offer(stone);
+    }
+    
+    // Process until there's 1 or 0 boulders left
+    while (maxHeap.size() > 1) {
+        // Get the two heaviest boulders
+        int y = maxHeap.poll(); // heaviest
+        int x = maxHeap.poll(); // second heaviest
+        
+        // Smash them together
+        if (x != y) {
+            maxHeap.offer(y - x); // add the remaining piece back
+        }
+        // If x == y, both are destroyed and we don't add anything back
+    }
+    
+    // Return the last boulder or 0 if none left
+    return maxHeap.isEmpty() ? 0 : maxHeap.peek();
+}
 
 
     /**
@@ -91,11 +110,25 @@ public class ProblemSolutions {
 
     public static ArrayList<String> showDuplicates(ArrayList<String> input) {
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure result is sorted in ascending order
-
+        ArrayList<String> result = new ArrayList<>();
+        HashMap<String, Integer> frequencyMap = new HashMap<>();
+    
+        // Count occurrences of each string
+        for (String str : input) {
+            frequencyMap.put(str, frequencyMap.getOrDefault(str, 0) + 1);
+        }
+    
+        // Collect strings that appear more than once
+        for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
+            if (entry.getValue() > 1) {
+                result.add(entry.getKey());
+            }
+        }
+    
+        // Sort the result in ascending order
+        Collections.sort(result);
+    
+        return result;
     }
 
 
@@ -131,9 +164,25 @@ public class ProblemSolutions {
 
     public static ArrayList<String> pair(int[] input, int k) {
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure returned lists is sorted as indicated above
+    ArrayList<String> result = new ArrayList<>();
+    Set<Integer> seen = new HashSet<>();
+    Set<String> uniquePairs = new HashSet<>();
+
+    for (int num : input) {
+        int complement = k - num;
+        if (seen.contains(complement)) {
+            // Create the pair string in sorted order
+            String pair = "(" + Math.min(num, complement) + ", " + Math.max(num, complement) + ")";
+            uniquePairs.add(pair);
+        }
+        seen.add(num);
     }
-}
+
+    // Convert the set to ArrayList and sort it
+    result.addAll(uniquePairs);
+    Collections.sort(result);
+    
+    return result;
+    }
+ }
+        
