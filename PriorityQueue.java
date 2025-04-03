@@ -151,7 +151,7 @@ class PriorityQueue<E, P> {
 
     public Node add(E e, P priority) {
 
-Node newNode = new Node(e, priority, tree.size());  // Create new node with element, priority, and initial index
+        Node newNode = new Node(e, priority, tree.size());  // Create new node with element, priority, and initial index
         tree.add(newNode);                                 // Add to end of heap array
         pullUp(newNode.idx);                               // Restore heap property
         return newNode;                                    // Return node reference
